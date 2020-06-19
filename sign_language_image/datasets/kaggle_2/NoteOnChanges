@@ -1,0 +1,6 @@
+Der originale Datensatz wird zunächst manuell in die Struktur "DatasetOrig -> test, train" aufgeteilt. In test und train
+sind dann jeweils die originalen Daten zu finden. Danach werden die Daten mit dem Script DatasetPrepareOrig weiterver-
+arbeitet.
+
+Die Testdatensätze sind aufgrund des Ansatzes des Tests durch Echtdaten sehr klein. Um dem entgegen zu wirken, werden
+300 zufällige Bilder aus jedem Klassenordner entnommen und mit den standardmäßigen Testdaten gemerged.
