@@ -1,9 +1,10 @@
 from __future__ import print_function
 import tensorflow as tf
+import numpy
 from tensorflow.keras import Sequential
 from tensorflow.keras.models import load_model
 from tensorflow.keras.layers import Flatten, Dense, Dropout, BatchNormalization
-from sign_language_image.datasets.kaggle_2.DatasetParser import get_train_and_val, get_test, class_names
+from sign_language_image.datasets.kaggle_1.DatasetParser import get_train_and_val, get_test, class_names
 from model_logging.LogRun import log_run
 from Util import evaluate
 
@@ -39,17 +40,24 @@ model.compile(loss='categorical_crossentropy',
               optimizer=tf.keras.optimizers.Adam(lr=0.0002),
               metrics=['accuracy'])
 
-tensorboard_callback, checkpoint, run_path = log_run("C:/Users/sebas/PycharmProjects/SignLanguageReconition/logs/")
+tensorboard_callback, checkpoint, run_path = log_run("/home/sebastian/PycharmProject/SignLanguageRecognition/logs/")
 model.summary()
+
+es = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=3)
 
 model.fit(train_ds,
           epochs=25,
           verbose=1,
           validation_data=val_ds,
-          callbacks=[tensorboard_callback, checkpoint])
+          callbacks=[tensorboard_callback, checkpoint, es])
 model = load_model(run_path + "model.mdl_wts.hdf5")
 score = model.evaluate(test_ds, verbose=1)
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
 
+test_data_labels = []
+for data, label in test_ds.take(-1):
+    test_data_labels.extend(label)
 
+pred = model.predict(test_ds, verbose=1)
+evaluate(numpy.argmax(pred, axis=1), numpy.argmax(test_data_labels, axis=1))
