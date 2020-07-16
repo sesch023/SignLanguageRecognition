@@ -41,7 +41,8 @@ for target_dir_name in glob.glob(target_directory + "/" + test_directory_name + 
     os.makedirs(os.path.dirname(new_path), exist_ok=True)
     shutil.move(target_dir_name, new_path)
 
-# Bewege die in rand_num_to_move Anzahl zufälliger Elemente pro Klasse in den Testordner.
+# Bewege die in rand_num_to_move definierte Anzahl zufälliger Elemente pro
+# Klasse in den Testordner.
 for target_dir_name in glob.glob(target_directory + "/" + train_directory_name + "/*"):
     target_dir_classes = glob.glob(target_dir_name + "/*")
     # Wähle für diese Klasse rand_num_to_move zufällige Elemente aus.
